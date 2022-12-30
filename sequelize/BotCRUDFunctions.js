@@ -2,10 +2,12 @@ const {
   MessageContent,
   ChannelContent,
   ServerContent,
+  WordcloudIDContent,
 } = require("../Models/MessageContent");
 
+const { v4: uuidv4 } = require('uuid');
 const { sequelize } = require("./SequelConfig");
-const { BotMessages, BotServers, BotChannels } = require("./sequelModels");
+const { BotMessages, BotServers, BotChannels, BotWordcloudID} = require("./sequelModels");
 
 async function InsertMessageIntoDatabase(messageContent) {
   await InsertChannelIDIntoServer(
@@ -132,10 +134,65 @@ async function SearchServer(serverName_) {
     return ReturnValues;
 }
 
+async function RetrieveWordcloudIDFromDatabase(content) {
+  const result = await BotWordcloudID.findOrCreate({
+    where: {
+      ServerID: content.serverID,
+      MessageAuthorID: content.author
+    },
+    defaults: {
+      WordcloudID: uuidv4()
+    }
+  })
+
+  var BotWordcloudJson = result[0].dataValues
+  const Wordcloud = new WordcloudIDContent(
+    BotWordcloudJson.ServerID,
+    BotWordcloudJson.MessageAuthorID,
+  ).SetCreatedAt(BotWordcloudJson.createdAt)
+  .SetUpdatedAt(BotWordcloudJson.updatedAt)
+  .SetUniqueWordcloudID(BotWordcloudJson.WordcloudID)
+
+  var NewRecordBool = result[1];
+  return [Wordcloud, NewRecordBool]
+}
+
+async function UpdateWordcloudIDInDatabase(content) {
+  await RetrieveWordcloudIDFromDatabase(content)
+
+  const result = await BotWordcloudID.update(
+    {
+      WordcloudID: uuidv4()
+    },
+    {
+      where: {
+        ServerID: content.serverID,
+        MessageAuthorID: content.author
+      },
+      returning: true
+    }, 
+  )
+  var AffectedRows = result[0];
+  if (AffectedRows==0 || (AffectedRows>1)) {
+    throw new Error("No rows were affected or more than one row was affected")
+  }
+
+  var BotWordcloudJson = result.at(1).at(0).dataValues;
+  const Wordcloud = new WordcloudIDContent(
+    BotWordcloudJson.ServerID,
+    BotWordcloudJson.MessageAuthorID,
+  ).SetCreatedAt(BotWordcloudJson.createdAt)
+  .SetUpdatedAt(BotWordcloudJson.updatedAt)
+  .SetUniqueWordcloudID(BotWordcloudJson.WordcloudID)
+
+  return Wordcloud
+}
+
 async function ClearAllTables() {
   await BotChannels.sync({ force: true });
   await BotServers.sync({ force: true });
   await BotMessages.sync({ force: true });
+  await BotWordcloudID.sync({force: true});
 }
 
 async function CloseConnection() {
@@ -152,4 +209,6 @@ module.exports = {
   SearchMessageWithinServerDatabase,
   SearchServer,
   CloseConnection,
+  RetrieveWordcloudIDFromDatabase,
+  UpdateWordcloudIDInDatabase
 };

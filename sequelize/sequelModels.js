@@ -4,6 +4,7 @@ const { sequelize } = require("./SequelConfig");
 class BotChannels extends Model {}
 class BotMessages extends Model {}
 class BotServers extends Model {}
+class BotWordcloudID extends Model{}
 
 BotChannels.init(
   {
@@ -68,8 +69,33 @@ BotServers.init(
   }
 );
 
+BotWordcloudID.init(
+  {
+    WordcloudID: {
+      type: Sequelize.UUID,
+      allowNull: false
+    },
+    ServerID: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    MessageAuthorID: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+  },
+  {
+    createdAt: true,
+    timestamps: true,
+    updatedAt: true,
+    sequelize: sequelize,
+    tableName: "WordcloudID",
+  }
+).removeAttribute("id");;
+
 module.exports = {
   BotChannels,
   BotServers,
   BotMessages,
+  BotWordcloudID,
 };

@@ -6,6 +6,7 @@ const sequelize = new Sequelize(database, username, password,
         logging: false,
         host: host_,
         dialect: "postgres",
+        
     }
 );
 
