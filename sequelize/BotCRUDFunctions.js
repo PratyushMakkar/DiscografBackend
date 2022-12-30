@@ -28,6 +28,7 @@ async function InsertMessageIntoDatabase(messageContent) {
   return content;
 }
 
+
 async function SearchMessageWithinDatabase(channelID_, author_) {
   var results = await BotMessages.findAll({
     where: {
@@ -87,6 +88,17 @@ async function GetChannelIDFromServer(serverID_) {
     return ReturnValues;
 }
 
+async function SearchMessageWithinServerDatabase(author_, serverID_) {
+  var MessageResults = [];
+
+  var channelIDs = await GetChannelIDFromServer(serverID_);
+  for (var i = 0; i<channelIDs.length; ++i) {
+    const MessageArray = await SearchMessageWithinDatabase(channelIDs.at(i).channelID, author_)
+    MessageResults.push(...MessageArray)
+  }
+  return MessageResults
+}
+
 async function JoinServer(serverID_, serverName_) {
   const results = await BotServers.create({
     ServerID: serverID_,
@@ -137,6 +149,7 @@ module.exports = {
   ClearAllTables,
   GetChannelIDFromServer,
   SearchMessageWithinDatabase,
+  SearchMessageWithinServerDatabase,
   SearchServer,
   CloseConnection,
 };

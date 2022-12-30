@@ -1,6 +1,6 @@
 const { MessageContent } = require("../Models/MessageContent");
 const {InsertChannelIDIntoServer, InsertMessageIntoDatabase, SearchMessageWithinDatabase
-, GetChannelIDFromServer, JoinServer, ClearAllTables, CloseConnection, SearchServer} = require("../sequelize/BotCRUDFunctions");
+,GetChannelIDFromServer, SearchMessageWithinServerDatabase, JoinServer, ClearAllTables, CloseConnection, SearchServer} = require("../sequelize/BotCRUDFunctions");
 
 const content = new MessageContent(
     "ChannelID2",
@@ -21,6 +21,20 @@ describe('Ensuring that all messages are added into the server', () => {
                 content.author
             );
             expect(result.at(0)).toStrictEqual(messageResult);
+        })
+
+        test('Testing if an inputted messages can be retrieved using only the AuthorID and serverID', async ()=> {
+          await ClearAllTables()
+          const messageResult = await InsertMessageIntoDatabase(content);
+          content.channelID = "ModifiedChannelID"
+          const messageResultModified = await InsertMessageIntoDatabase(content)
+
+          var result = await SearchMessageWithinServerDatabase(
+              content.author,
+              content.guildID
+          );
+          
+          expect(result).toStrictEqual([messageResult, messageResultModified]);
         })
 
         test('Test to determine if duplicate channelIDs are inserted into BotChannels', async () => {
@@ -59,7 +73,7 @@ describe('Ensuring that all messages are added into the server', () => {
             }
             var ReturnValues = await GetChannelIDFromServer(ServerID);
             
-            for (var i =0 ; i<4; ++i) {
+            for (var i = 0 ; i<4; ++i) {
                 expect(ReturnValues.at(i)).toStrictEqual(channels.at(i));
             }
         })
