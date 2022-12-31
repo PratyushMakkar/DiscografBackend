@@ -134,6 +134,26 @@ async function SearchServer(serverName_) {
     return ReturnValues;
 }
 
+async function RetrieveServerIDFromDatabase(wordcloudID) {
+  const result = await BotWordcloudID.findOne({
+    where: {
+      WordcloudID: wordcloudID,
+    }
+  })
+
+  if (result==null) {
+    return null;
+  }
+
+  var BotWordcloudJSON = result.dataValues
+  return new WordcloudIDContent(
+    BotWordcloudJSON.ServerID,
+    BotWordcloudJSON.MessageAuthorID
+  ).SetUniqueWordcloudID(BotWordcloudJSON.WordcloudID)
+  .SetCreatedAt(BotWordcloudJSON.createdAt)
+  .SetUpdatedAt(BotWordcloudJSON.updatedAt)
+}
+
 async function RetrieveWordcloudIDFromDatabase(content) {
   const result = await BotWordcloudID.findOrCreate({
     where: {
@@ -210,5 +230,6 @@ module.exports = {
   SearchServer,
   CloseConnection,
   RetrieveWordcloudIDFromDatabase,
-  UpdateWordcloudIDInDatabase
+  UpdateWordcloudIDInDatabase,
+  RetrieveServerIDFromDatabase
 };

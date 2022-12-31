@@ -1,15 +1,15 @@
 var express = require('express');
+const {sequalize} = require('./sequelize/SequelConfig')
+
+var id = require('./routes/id')
+var wordcloud = require('./routes/wordcloud')
+
 var app = express();
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
-});
-
-app.get('/', function (req, res) {
-  res.contentType('application/json');
-  
-});
+app.use('/id', id)
+app.use('/wordcloud', wordcloud)
 
 app.listen(3000, function () {
   console.log('UWEngKid backend listening on port 3000!');
 });
+

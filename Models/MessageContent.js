@@ -1,5 +1,4 @@
 class MessageContent {
-
   constructor(channelID, author, contentText, timestamp) {
     this.channelID = channelID;
     this.author = author;
@@ -34,7 +33,6 @@ class WordcloudIDContent {
     this.author = authorId_;
     this.serverID = ServerID_;
   }
-
   SetUniqueWordcloudID(wordcloudID_) {
     this.wordcloudID = wordcloudID_;
     return this;
