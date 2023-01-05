@@ -1,10 +1,10 @@
 const { Sequelize } = require("sequelize");
-const { username, password, database, host_ } = require("../config.json");
+const config = require('../config')
 
-const sequelize = new Sequelize(database, username, password, 
+const sequelize = new Sequelize(config.DATABSE, config.USERNAME, config.PASSWORD,
     {
         logging: false,
-        host: host_,
+        host: config.HOST,
         dialect: "postgres",
         
     }

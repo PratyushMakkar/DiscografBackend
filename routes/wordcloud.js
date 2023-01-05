@@ -1,7 +1,9 @@
 const {RetrieveServerIDFromDatabase, SearchMessageWithinServerDatabase} = require('../sequelize/BotCRUDFunctions')
 const express = require('express')
-const {API_KEY, API_URL} = require('../config.json')
 const { default: axios } = require('axios')
+const {config} = require('../config')
+
+const API_URL = config.API_URL
 
 const router = express.Router()
 router.get('/:wordcloudID/', async (req, res) => {
