@@ -1,7 +1,7 @@
 const {RetrieveServerIDFromDatabase, SearchMessageWithinServerDatabase} = require('../sequelize/BotCRUDFunctions')
 const express = require('express')
 const { default: axios } = require('axios')
-const {config} = require('../config')
+const config = require('../config')
 
 const API_URL = config.API_URL
 
