@@ -8,10 +8,16 @@ router.post('/update/:ServID/:AuthorID', (req, res) => {
     req.params.ServID,
     req.params.AuthorID
   )
-  
-  const result = UpdateWordcloudIDInDatabase(content)
   res.type('application/json')
-  res.send(result)
+
+  try {
+    const result = UpdateWordcloudIDInDatabase(content)
+    res.send(result)
+  } catch (err) {
+    console.log(err)
+    res.sendStatus(500)
+  }
+  
 })
 
 router.get('/:ServID/:AuthorID', async (req, res) => {
@@ -19,10 +25,15 @@ router.get('/:ServID/:AuthorID', async (req, res) => {
     req.params.ServID,
     req.params.AuthorID
   )
-
-  const result = await (await (RetrieveWordcloudIDFromDatabase(content))).at(0)
   res.type('application/json')
-  res.send(result)
+
+  try {
+    const result = await (await (RetrieveWordcloudIDFromDatabase(content))).at(0)
+    res.send(result)
+  } catch (err) {
+    console.log(err)
+    res.sendStatus(500)
+  }
 })
 
 module.exports = router
