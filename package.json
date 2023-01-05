@@ -4,6 +4,7 @@
   "description": "Backend project for EngKidUW Discord Bot",
   "main": "index.js",
   "scripts": {
+    "start": "node .",
     "test": "jest --detectOpenHandles"
   },
   "author": "Pratyush Makkar",
