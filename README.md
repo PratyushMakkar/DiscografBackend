@@ -7,7 +7,9 @@ The project is an ongoing effort with various components that you can contribute
 2. Data backend. This component (this repository) is focused on delivering user data to both the discord Bot and the discord web UI. It communicates both with the PostgresSQL server, the Flask resource server and all frontend components. This component is fully complete currently. 
 3. The crux of the wordcloud/sentiment analysis functionality is implemented in a seperate resource server that communicates with the Node JS backend (This decision was made to avoid doing compute intensive tasks in the backend) The wordcloud is made using a pruned prefix-tree, employing a strategy similar to autocomplete algorithms. 
 4. The Discord bot itself. The bot itself is a standard discord bot with support for functionality such as /id and /wordcloud. The bot is implemented using Discord JS.
-   
+
+![Screenshot](Screenshots/Login.png)
+
 ## :inbox_tray: Dependancies And Installation 
 The project used standard ```Node JS ``` structure and all dependancies can be found in the file ```package.json``` at the root of the project. 
 1. Add the <kbd>Discograf</kbd> directory into your projects directory using the <kbd>git clone</kbd> commpand.
@@ -106,8 +108,6 @@ async function GetWordcloud(authorID, serverID) {
 }
 
 ```
-![Screenshot](Screenshots/Login.png)
-![Screenshot](Screenshots/Explanation.png)
 ## :hammer_and_wrench: Contributing to the project
 If you would like to contribute to the project, feel free to create a pull request. Make sure that all documentation is present for any changes.  
 ## :scroll: License
