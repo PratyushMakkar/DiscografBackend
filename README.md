@@ -104,6 +104,9 @@ async function GetWordcloud(authorID, serverID) {
   })
   return result['data']
 }
+
+![Screenshot](Screenshots/Login.png)
+![Screenshot](Screenshots/Explanation.png)
 ```
 ## :hammer_and_wrench: Contributing to the project
 If you would like to contribute to the project, feel free to create a pull request. Make sure that all documentation is present for any changes.  
